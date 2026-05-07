@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nuvis - 視聴</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    .watch-layout {
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 24px;
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 24px 40px;
+    }
+    @media (max-width: 900px) {
+      .watch-layout { grid-template-columns: 1fr; }
+    }
+    .watch-player {
+      background: #000;
+      aspect-ratio: 16/9;
+      border-radius: var(--radius);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--border);
+      position: relative;
+    }
+    .player-placeholder {
+      color: var(--green-dim);
+      font-size: 14px;
+      text-align: center;
+    }
+    .watch-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.3;
+      margin: 14px 0 10px;
+    }
+    .watch-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+    .action-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 14px;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      color: var(--text-dim);
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: 'Noto Sans JP', sans-serif;
+    }
+    .action-btn:hover { border-color: var(--green-dim); color: var(--green); }
+    .action-btn.liked { border-color: var(--green); color: var(--green); }
+    .channel-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .channel-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      color: var(--green);
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .channel-name { color: #fff; font-weight: 600; font-size: 14px; }
+    .channel-subs { color: var(--text-muted); font-size: 12px; }
+    .description-box {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px;
+      margin-bottom: 16px;
+    }
+    .desc-meta { color: var(--text-muted); font-size: 12px; margin-bottom: 8px; }
+    .desc-text { color: var(--text-dim); font-size: 13px; line-height: 1.6; }
+    .desc-tags { color: var(--green-dim); font-size: 12px; margin-top: 8px; }
+    .desc-toggle {
+      background: none;
+      border: none;
+      color: var(--green);
+      font-size: 12px;
+      cursor: pointer;
+      margin-top: 6px;
+      font-family: 'Noto Sans JP', sans-serif;
+      padding: 0;
+    }
+    .related-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 12px;
+      data-i18n: "related";
+    }
+    .related-item {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      padding: 6px;
+      border-radius: var(--radius-sm);
+      border: 1px solid transparent;
+      transition: border-color 0.2s;
+    }
+    .related-item:hover { border-color: var(--border); background: var(--card-bg); }
+    .related-thumb {
+      flex-shrink: 0;
+      width: 120px;
+      aspect-ratio: 16/9;
+      background: #1a2a1e;
+      border-radius: 6px;
+      position: relative;
+      overflow: hidden;
+    }
+    .related-info { flex: 1; min-width: 0; }
+    .related-video-title { color: #fff; font-size: 12px; font-weight: 500; line-height: 1.4; margin-bottom: 4px; }
+    .related-channel { color: var(--green-dim); font-size: 11px; }
+    .related-views { color: var(--text-muted); font-size: 11px; }
+    .comment-input-row {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-glow bg-glow-1"></div>
+  <div id="navbar-container"></div>
+
+  <div class="page-content main">
+    <div class="watch-layout">
+      <!-- Left: Player + Info -->
+      <div>
+        <div class="watch-player">
+          <div class="player-placeholder">
+            <svg width="60" height="60" viewBox="0 0 24 24" fill="currentColor" style="color:var(--green);opacity:0.3;display:block;margin:0 auto 8px"><path d="M8 5v14l11-7z"/></svg>
+            <div id="player-label">動画プレイヤー</div>
+          </div>
+        </div>
+
+        <h1 class="watch-title" id="watch-title">サンプル動画タイトル — ここに動画のタイトルが入ります</h1>
+
+        <div class="channel-row">
+          <div class="channel-avatar">C</div>
+          <div>
+            <div class="channel-name" data-i18n="channel_name">チャンネル名</div>
+            <div class="channel-subs">124<span data-i18n="subscribers">万人 登録者</span></div>
+          </div>
+          <div class="nav-spacer"></div>
+          <div class="watch-actions">
+            <button class="action-btn" id="like-btn" onclick="toggleLike()">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 9V5a3 3 0 00-3-3l-4 9v11h11.28a2 2 0 002-1.7l1.38-9a2 2 0 00-2-2.3H14z"/><path d="M7 22H4a2 2 0 01-2-2v-7a2 2 0 012-2h3"/></svg>
+              <span data-i18n="likes">45.0K</span>
+            </button>
+            <button class="action-btn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+              <span data-i18n="share">共有</span>
+            </button>
+            <button class="action-btn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              <span data-i18n="dl">DL</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="description-box">
+          <div class="desc-meta">1.2M <span data-i18n="views">回視聴</span> · 3日前</div>
+          <div class="desc-text" id="desc-text">
+            ここに動画の説明文が入ります。<br>
+            概要欄の内容が長くなる場合は「もっと見る」で展開できます。
+          </div>
+          <div class="desc-tags">#タグ #サンプル #Nuvis</div>
+          <button class="desc-toggle" id="desc-toggle" onclick="toggleDesc()">
+            <span data-i18n="see_more">もっと見る</span>
+          </button>
+        </div>
+
+        <!-- Comments -->
+        <div style="margin-bottom:12px">
+          <div class="section-title" style="margin-bottom:14px" data-i18n="comments">コメント</div>
+          <div class="comment-input-row">
+            <div class="channel-avatar" style="width:32px;height:32px;font-size:13px">U</div>
+            <input class="input-field" data-i18n-placeholder="comment_placeholder" placeholder="コメントを追加..." style="border-radius:999px">
+          </div>
+          <div style="color:var(--text-muted);font-size:13px;text-align:center;padding:20px 0">コメントセクション（未実装）</div>
+        </div>
+      </div>
+
+      <!-- Right: Related -->
+      <div>
+        <div class="related-title" data-i18n="related">関連動画</div>
+        <div id="related-list"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/app.js"></script>
+  <script src="/js/navbar.js"></script>
+  <script>
+    document.getElementById('navbar-container').innerHTML = renderNavbar('');
+    applyLang(); initNavbar(); initSearch();
+
+    const params = new URLSearchParams(location.search);
+    const vid = params.get('v') || 't1';
+    document.getElementById('player-label').textContent = `動画プレイヤー (videoId: ${vid})`;
+
+    // Related
+    const related = [
+      { id:'r1', title:'関連動画 1', channel:'チャンネルA', views:'980.0K', duration:'5:12' },
+      { id:'r2', title:'関連動画 2', channel:'チャンネルB', views:'540.0K', duration:'9:00' },
+      { id:'r3', title:'関連動画 3', channel:'チャンネルC', views:'210.0K', duration:'3:30' },
+      { id:'r4', title:'関連動画 4', channel:'チャンネルD', views:'88.0K', duration:'12:00' },
+      { id:'r5', title:'関連動画 5', channel:'チャンネルE', views:'430.0K', duration:'3:00' },
+    ];
+    const list = document.getElementById('related-list');
+    related.forEach(v => {
+      list.innerHTML += `
+        <div class="related-item" onclick="goWatch('${v.id}')">
+          <div class="related-thumb">
+            <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style="opacity:0.3;color:var(--green)"><path d="M8 5v14l11-7z"/></svg>
+            </div>
+            <span class="video-duration" style="position:absolute;bottom:4px;right:4px;font-size:10px">${v.duration}</span>
+          </div>
+          <div class="related-info">
+            <div class="related-video-title">${v.title}</div>
+            <div class="related-channel">${v.channel}</div>
+            <div class="related-views">${v.views} ${t('views')}</div>
+          </div>
+        </div>`;
+    });
+
+    function toggleLike() {
+      const btn = document.getElementById('like-btn');
+      btn.classList.toggle('liked');
+    }
+
+    let descExpanded = false;
+    function toggleDesc() {
+      descExpanded = !descExpanded;
+      const toggle = document.getElementById('desc-toggle');
+      toggle.innerHTML = descExpanded
+        ? `<span data-i18n="see_less">${t('see_less')}</span>`
+        : `<span data-i18n="see_more">${t('see_more')}</span>`;
+    }
+  </script>
+</body>
+</html>

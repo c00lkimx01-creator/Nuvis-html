@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nuvis - Shorts</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    .shorts-viewer {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px 0 60px;
+    }
+    .short-player-wrap {
+      position: relative;
+      width: 360px;
+      max-width: 100%;
+    }
+    .short-player {
+      aspect-ratio: 9/16;
+      background: #000;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .short-player-bg {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, #0a1a0d 0%, #000 100%);
+    }
+    .short-player-icon {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+    }
+    .short-side-actions {
+      position: absolute;
+      right: -52px;
+      bottom: 80px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+    .short-action-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #fff;
+    }
+    .short-action-btn .icon-wrap {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+    }
+    .short-action-btn:hover .icon-wrap { background: rgba(45,255,110,0.2); color: var(--green); }
+    .short-action-btn span { font-size: 11px; color: var(--text-dim); }
+    .short-nav {
+      display: flex;
+      gap: 12px;
+      margin-top: 16px;
+    }
+    .short-nav-btn {
+      padding: 10px 24px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: none;
+      color: var(--text-dim);
+      font-family: 'Noto Sans JP', sans-serif;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .short-nav-btn:hover { border-color: var(--green-dim); color: var(--green); }
+    .short-info {
+      margin-top: 14px;
+      text-align: center;
+      width: 360px;
+      max-width: 100%;
+    }
+    .short-info-title { color: #fff; font-size: 15px; font-weight: 600; margin-bottom: 4px; }
+    .short-info-channel { color: var(--green-dim); font-size: 13px; }
+    @media (max-width: 500px) {
+      .short-side-actions { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-glow bg-glow-1"></div>
+  <div id="navbar-container"></div>
+
+  <div class="page-content main">
+    <div class="container">
+      <div class="section-header" style="margin-bottom:20px">
+        <div class="section-title">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="color:var(--green)"><path d="M10 9V5l-7 7 7 7v-4.1c5 0 8.5 1.6 11 5.1-1-5-4-10-11-11z"/></svg>
+          Shorts
+        </div>
+      </div>
+
+      <div class="shorts-viewer">
+        <div class="short-player-wrap">
+          <div class="short-player">
+            <div class="short-player-bg"></div>
+            <div class="short-player-icon">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="currentColor" style="color:var(--green);opacity:0.4"><path d="M8 5v14l11-7z"/></svg>
+              <div style="color:var(--text-muted);font-size:12px;margin-top:8px" id="short-id-label">Short #1</div>
+            </div>
+          </div>
+
+          <div class="short-side-actions">
+            <button class="short-action-btn" onclick="toggleShortLike()">
+              <div class="icon-wrap" id="short-like-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 9V5a3 3 0 00-3-3l-4 9v11h11.28a2 2 0 002-1.7l1.38-9a2 2 0 00-2-2.3H14z"/></svg>
+              </div>
+              <span id="short-like-count">12.4K</span>
+            </button>
+            <button class="short-action-btn">
+              <div class="icon-wrap">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+              </div>
+              <span data-i18n="share">共有</span>
+            </button>
+            <button class="short-action-btn">
+              <div class="icon-wrap">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>
+              </div>
+              <span>その他</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="short-info">
+          <div class="short-info-title" id="short-title">Shorts タイトルがここに入ります</div>
+          <div class="short-info-channel" id="short-channel">チャンネル名</div>
+        </div>
+
+        <div class="short-nav">
+          <button class="short-nav-btn" onclick="prevShort()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+            前へ
+          </button>
+          <button class="short-nav-btn" onclick="nextShort()">
+            次へ
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/app.js"></script>
+  <script src="/js/navbar.js"></script>
+  <script>
+    document.getElementById('navbar-container').innerHTML = renderNavbar('');
+    applyLang(); initNavbar(); initSearch();
+
+    let currentShort = 0;
+    const shorts = [
+      { id:'s1', title:'Shorts タイトル 1', channel:'チャンネルA', likes:'12.4K' },
+      { id:'s2', title:'Shorts タイトル 2', channel:'チャンネルB', likes:'8.2K' },
+      { id:'s3', title:'Shorts タイトル 3', channel:'チャンネルC', likes:'45.1K' },
+      { id:'s4', title:'Shorts タイトル 4', channel:'チャンネルD', likes:'3.9K' },
+      { id:'s5', title:'Shorts タイトル 5', channel:'チャンネルE', likes:'21.0K' },
+    ];
+
+    function updateShort() {
+      const s = shorts[currentShort];
+      document.getElementById('short-id-label').textContent = `Short #${currentShort+1}`;
+      document.getElementById('short-title').textContent = s.title;
+      document.getElementById('short-channel').textContent = s.channel;
+      document.getElementById('short-like-count').textContent = s.likes;
+    }
+    function nextShort() { currentShort = (currentShort+1)%shorts.length; updateShort(); }
+    function prevShort() { currentShort = (currentShort-1+shorts.length)%shorts.length; updateShort(); }
+    function toggleShortLike() {
+      document.getElementById('short-like-icon').style.color =
+        document.getElementById('short-like-icon').style.color === 'var(--green)' ? '' : 'var(--green)';
+    }
+    updateShort();
+  </script>
+</body>
+</html>
